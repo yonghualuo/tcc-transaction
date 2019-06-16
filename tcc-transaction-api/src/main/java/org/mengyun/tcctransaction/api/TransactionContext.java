@@ -12,6 +12,9 @@ public class TransactionContext implements Serializable {
     private static final long serialVersionUID = -8199390103169700387L;
     private TransactionXid xid;
 
+    /**
+     * TransactionStatus.status
+     */
     private int status;
 
     private Map<String, String> attachments = new ConcurrentHashMap<String, String>();

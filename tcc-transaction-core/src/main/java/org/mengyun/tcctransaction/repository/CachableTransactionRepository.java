@@ -21,6 +21,9 @@ public abstract class CachableTransactionRepository implements TransactionReposi
 
     private int expireDuration = 120;
 
+    /**
+     * 本地缓存事务信息
+     */
     private Cache<Xid, Transaction> transactionXidCompensableTransactionCache;
 
     @Override
@@ -68,6 +71,11 @@ public abstract class CachableTransactionRepository implements TransactionReposi
         return result;
     }
 
+    /**
+     * 查找事务信息，缓存优先
+     * @param transactionXid
+     * @return
+     */
     @Override
     public Transaction findByXid(TransactionXid transactionXid) {
         Transaction transaction = findFromCache(transactionXid);
@@ -115,6 +123,12 @@ public abstract class CachableTransactionRepository implements TransactionReposi
         this.expireDuration = durationInSeconds;
     }
 
+
+    /**
+     * 保存事务信息，有File、JDBC、Redis、Zookeeper四种实现。
+     * @param transaction
+     * @return
+     */
     protected abstract int doCreate(Transaction transaction);
 
     protected abstract int doUpdate(Transaction transaction);

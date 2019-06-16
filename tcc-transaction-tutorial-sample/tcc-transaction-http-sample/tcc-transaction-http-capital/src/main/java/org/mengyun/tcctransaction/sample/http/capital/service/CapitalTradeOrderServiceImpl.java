@@ -83,7 +83,10 @@ public class CapitalTradeOrderServiceImpl implements CapitalTradeOrderService {
 
         //check if the trade order status is DRAFT, if yes, return directly, ensure idempotency.
         if (null != tradeOrder && "DRAFT".equals(tradeOrder.getStatus())) {
+
+            // 确认订单状态
             tradeOrder.confirm();
+            // 乐观锁更新
             tradeOrderRepository.update(tradeOrder);
 
             CapitalAccount transferToAccount = capitalAccountRepository.findByUserId(tradeOrderDto.getOppositeUserId());
@@ -109,6 +112,7 @@ public class CapitalTradeOrderServiceImpl implements CapitalTradeOrderService {
 
         //check if the trade order status is DRAFT, if yes, return directly, ensure idempotency.
         if (null != tradeOrder && "DRAFT".equals(tradeOrder.getStatus())) {
+            // 订单状态变更为取消
             tradeOrder.cancel();
             tradeOrderRepository.update(tradeOrder);
 

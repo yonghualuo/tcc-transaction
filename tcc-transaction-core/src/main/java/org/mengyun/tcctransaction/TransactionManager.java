@@ -36,6 +36,11 @@ public class TransactionManager {
 
     }
 
+    /**
+     * 开启事务
+     * @param uniqueIdentify
+     * @return
+     */
     public Transaction begin(Object uniqueIdentify) {
         Transaction transaction = new Transaction(uniqueIdentify,TransactionType.ROOT);
         transactionRepository.create(transaction);
@@ -50,6 +55,11 @@ public class TransactionManager {
         return transaction;
     }
 
+    /**
+     * 事务传播，有事务上下文
+     * @param transactionContext
+     * @return
+     */
     public Transaction propagationNewBegin(TransactionContext transactionContext) {
 
         Transaction transaction = new Transaction(transactionContext);
@@ -147,6 +157,10 @@ public class TransactionManager {
         }
     }
 
+    /**
+     * 取双向队列头部element
+     * @return
+     */
     public Transaction getCurrentTransaction() {
         if (isTransactionActive()) {
             return CURRENT.get().peek();
@@ -159,7 +173,11 @@ public class TransactionManager {
         return transactions != null && !transactions.isEmpty();
     }
 
-
+    /**
+     * 链表保存事务链
+     *
+     * @param transaction
+     */
     private void registerTransaction(Transaction transaction) {
 
         if (CURRENT.get() == null) {
